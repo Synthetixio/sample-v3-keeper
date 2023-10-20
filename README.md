@@ -67,3 +67,13 @@ INFO: 0x9863Dae3f4b5F4Ffe3A841a21565d57F2BA10E87/event/OrderCommitted[txn=0x4f22
 Perps order committed: OrderCommitted(marketId=100 accountId=100 trackingCode=0x4b57454e54410000000000000000000000000000000000000000000000000000 orderType=0 sizeDelta=62200000000000000 acceptablePrice=1623332565317468836725 settlementTime=1697833717 expirationTime=1697833777 sender=0x43C92D390D3ED89716e4a0776d8Aea1fB965D55D)
 2023-10-20 14:28:22,139 - Synthetix - INFO - Settling order for 100 for market ETH
 ```
+
+## Status Check
+
+You can check the status of the connected account by running the following:
+
+```bash
+python status.py
+```
+
+This will run a short status script to print your balances and perps account info. It can be used to check that your account and RPC are connected properly without running the Silverback app.

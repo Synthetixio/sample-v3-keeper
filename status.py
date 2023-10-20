@@ -3,14 +3,14 @@ from dotenv import load_dotenv
 from synthetix import Synthetix
 
 # load environment variables
-load_dotenv()
+load_dotenv(override=True)
 
 # initialize the client
 snx = Synthetix(
-    provider_rpc=os.getenv('PROVIDER_RPC'),
-    network_id=os.getenv('NETWORK_ID'),
-    address=os.getenv('ADDRESS'),
-    private_key=os.getenv('PRIVATE_KEY'),
+    provider_rpc=os.environ.get('PROVIDER_RPC'),
+    network_id=os.environ.get('NETWORK_ID'),
+    address=os.environ.get('ADDRESS'),
+    private_key=os.environ.get('PRIVATE_KEY'),
 )
 
 snx.perps.get_account_ids()

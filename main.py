@@ -8,7 +8,7 @@ from synthetix import Synthetix
 from silverback import SilverbackApp
 
 # load the environment variables
-load_dotenv()
+load_dotenv(override=True)
 
 PROVIDER_RPC = os.environ.get('PROVIDER_RPC')
 ADDRESS = os.environ.get('ADDRESS')
