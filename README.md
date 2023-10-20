@@ -1,6 +1,6 @@
-# Sample Project
+# Synthetix V3 Perps Order Keeper
 
-This is a template to help you start a Synthetix project using the [Python SDK](https://github.com/Synthetixio/python-sdk).
+This project is a sample order keeper for Synthetix Perps V3 using the [Python SDK](https://github.com/Synthetixio/python-sdk) and [Project Template](https://github.com/Synthetixio/project-template-python) from Synthetix, and [Silverback](https://github.com/ApeWorX/silverback) from Apeworx.
 
 ## Getting Started
 
@@ -13,8 +13,8 @@ This is a template to help you start a Synthetix project using the [Python SDK](
 2. Download this repository to a preferred location on your computer. Here's how:
 
 ```bash
-git clone https://github.com/Synthetixio/project-template-python.git
-cd project-template-python
+git clone https://github.com/Synthetixio/sample-v3-keeper.git
+cd sample-v3-keeper
 ```
 
 3. Set up the required packages in a virtual environment:
@@ -27,42 +27,43 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
+Then install `ape` plugins:
+
+```bash
+ape plugins install .
+```
+
 4. Make a copy of the .env.example file, name it .env, and then enter the details for your RPC and wallet.
 
-5. Run the status script:
+In order to subscribe to events using Silverback, you will also need a connection to [Alchemy](https://www.alchemy.com/). You can sign up for a free account and create a new project to get an API key, then add it to your environment:
 
 ```bash
-python status.py
+export WEB3_ALCHEMY_API_KEY=<your-api-key>
 ```
 
-You should see results displaying your balances and market information, as shown below:
+5. Run the keeper:
 
 ```bash
-$ python status.py
-
-Address: 0xD199157bB8a47bEF78e539908dEE5A41e7d5FE9f
-ETH balance: 1.287
-WETH balance: 0.0
-sUSD balance: 10238.922
-
-Perps accounts: 100, 101, 102
-Perps default account: 100
-Perps markets: BTC, ETH, LINK, OP, SNX
+silverback run main:app --network base:goerli:alchemy --runner silverback.runner:WebsocketRunner
 ```
 
-Congratulations! If you've made it this far you can start to build your own project using the Python SDK. More scripts are available in the `scripts` directory.
+You should see logs at each block that the keeper is running:
+```bash
+INFO: block[block=0x485d5517129207ddacb0ab8f61639103ebf860c187175f656232b50bbb63f685] - 0.000s (0.0%)
+INFO: block[block=0x8bcbf1811722031fde5b5fcf510a8ef87a230eaae2b890ba9ca17be8a8ffc94d] - Started
+2023-10-20 14:28:14,161 - Synthetix - INFO - Received block number 11320038
+INFO: block[block=0x8bcbf1811722031fde5b5fcf510a8ef87a230eaae2b890ba9ca17be8a8ffc94d] - 0.000s (0.0%)
+INFO: block[block=0x50aa19fde7ec10c69b51625430848c2f625b298d95e91b37e750e34039221816] - Started
+2023-10-20 14:28:14,362 - Synthetix - INFO - Received block number 11320039
+INFO: block[block=0x50aa19fde7ec10c69b51625430848c2f625b298d95e91b37e750e34039221816] - 0.000s (0.0%)
+```
 
-## Running Scripts
-
-If you've completed the steps above, you can run any of the scripts in the `scripts` directory. For example:
+Additionally, when an `OrderCommitted` event happens the logs are displayed and an order settlement is triggered:
 
 ```bash
-python scripts/create_account.py
+INFO: block[block=0xce2a1bbc1ba1df3138d9182888ac04bdab15a633fe945eca928b3e0f8d34dcbd] - Started
+2023-10-20 14:28:22,135 - Synthetix - INFO - Received block number 11320042
+INFO: 0x9863Dae3f4b5F4Ffe3A841a21565d57F2BA10E87/event/OrderCommitted[txn=0x4f220ae82677e80de01f041e92fe6de19d9b19bf16d8d582129308906c857e59,log_index=32] - Started
+Perps order committed: OrderCommitted(marketId=100 accountId=100 trackingCode=0x4b57454e54410000000000000000000000000000000000000000000000000000 orderType=0 sizeDelta=62200000000000000 acceptablePrice=1623332565317468836725 settlementTime=1697833717 expirationTime=1697833777 sender=0x43C92D390D3ED89716e4a0776d8Aea1fB965D55D)
+2023-10-20 14:28:22,139 - Synthetix - INFO - Settling order for 100 for market ETH
 ```
-
-By default, these scripts won't submit transactions. To enable this, you must edit the script and set submit=True. This precaution helps avoid unintended transactions on the blockchain.
-Always use caution and carefully review the code before submitting transactions.
-
-## Documentation
-
-For a full list of available methods, see the [Python SDK documentation](https://synthetixio.github.io/python-sdk/).
