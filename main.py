@@ -51,7 +51,7 @@ def settle_perps_order(event):
     market_name = snx.perps.markets_by_id[market_id]["market_name"]
 
     snx.logger.info(f'Settling order for {account_id} for market {market_name}')
-    snx.perps.settle_pyth_order(account_id, submit=True)
+    snx.perps.settle_order(account_id, submit=True)
 
 @app.on_(PerpsMarket.OrderCommitted, new_block_timeout=5)
 def perps_order_committed(event):
