@@ -1,4 +1,4 @@
 python-dotenv
 eth-ape
-synthetix
+synthetix==0.1.0
 silverback
