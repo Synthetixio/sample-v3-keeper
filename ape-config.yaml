@@ -2,7 +2,10 @@ name: keepers
 
 plugins:
   - name: alchemy
+    version: "<0.7.0"
+
   - name: base
+    version: "<0.7.0"
 
 base:
   default_network: goerli

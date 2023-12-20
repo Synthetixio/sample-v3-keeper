@@ -35,10 +35,10 @@ ape plugins install .
 
 4. Make a copy of the .env.example file, name it .env, and then enter the details for your RPC and wallet.
 
-In order to subscribe to events using Silverback, you will also need a connection to [Alchemy](https://www.alchemy.com/). You can sign up for a free account and create a new project to get an API key, then add it to your environment:
+In order to subscribe to events using Silverback, you will also need a connection to [Alchemy](https://www.alchemy.com/). You can sign up for a free account and create a new project to get an API key, then add it to your `.env` file:
 
 ```bash
-export WEB3_ALCHEMY_API_KEY=<your-api-key>
+WEB3_ALCHEMY_API_KEY=<your-api-key>
 ```
 
 5. Run the keeper:
