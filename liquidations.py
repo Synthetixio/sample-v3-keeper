@@ -71,7 +71,7 @@ def get_account_ids(snx):
     accounts_to_check = [
         account[0]
         for account in account_infos
-        if wei_to_ether(account[1][1]) >= 0 and wei_to_ether(account[2]) >= 100
+        if wei_to_ether(account[1][1]) >= 0
     ]
     return accounts_to_check
 
