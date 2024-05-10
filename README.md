@@ -44,7 +44,7 @@ WEB3_ALCHEMY_API_KEY=<your-api-key>
 5. Run the keeper:
 
 ```bash
-silverback run main:app --network base:goerli:alchemy --runner silverback.runner:WebsocketRunner
+silverback run main:app --network base:sepolia:alchemy --runner silverback.runner:WebsocketRunner
 ```
 
 You should see logs at each block that the keeper is running:
