@@ -1,4 +1,4 @@
 python-dotenv
-eth-ape==0.6.27
-synthetix==0.1.2
-silverback==0.1.1
+eth-ape
+synthetix==0.1.10
+silverback

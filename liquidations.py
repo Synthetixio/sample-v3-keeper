@@ -1,4 +1,4 @@
-# silverback run liquidations:app --network base:goerli:alchemy --runner silverback.runner:WebsocketRunner
+# silverback run liquidations:app --network base:sepolia:alchemy --runner silverback.runner:WebsocketRunner
 import os
 import asyncio
 import concurrent.futures
@@ -13,19 +13,14 @@ from synthetix.utils.multicall import multicall_erc7412
 from silverback import SilverbackApp
 
 # load the environment variables
-load_dotenv()
+load_dotenv(override=True)
 
-PROVIDER_RPC = os.environ.get("PROVIDER_RPC")
-ADDRESS = os.environ.get("ADDRESS")
 PRIVATE_KEY = os.environ.get("PRIVATE_KEY")
-NETWORK_ID = os.environ.get("NETWORK_ID")
 
 # init snx
 snx = Synthetix(
-    provider_rpc=PROVIDER_RPC,
+    provider_rpc=chain.provider.uri,
     private_key=PRIVATE_KEY,
-    address=ADDRESS,
-    network_id=NETWORK_ID,
 )
 
 
@@ -99,12 +94,10 @@ def startup(state):
 def exec_block(block: BlockAPI):
     # every 100 blocks, refresh the account ids
     if block.number % 100 == 0:
-        snx.logger.info("Refreshing account ids")
         app_state["account_ids"] = get_account_ids(snx)
 
     # every 10 blocks check for liquidations
     if block.number % 10 == 0:
-        snx.logger.info("Checking accounts for liquidation")
         # split into 500 account chunks and check liquidations
         chunks = [
             app_state["account_ids"][x : x + 500]
@@ -117,12 +110,19 @@ def exec_block(block: BlockAPI):
             liquidatable_accounts = [
                 can_liquidate[0] for can_liquidate in can_liquidates if can_liquidate[1]
             ]
+            snx.logger.info(f"Found {len(liquidatable_accounts)} liquidatable accounts")
             for account in liquidatable_accounts:
-                print(f"Liquidating account {account}")
+                snx.logger.info(f"Liquidating account {account}")
                 try:
-                    tx = snx.perps.liquidate(account, submit=True)
-                    print(tx)
+                    liquidate_tx_params = snx.perps.liquidate(account, submit=False)
+
+                    # double the base fee
+                    liquidate_tx_params["maxFeePerGas"] = (
+                        liquidate_tx_params["maxFeePerGas"] * 2
+                    )
+
+                    snx.execute_transaction(liquidate_tx_params)
                 except Exception as e:
-                    print(f"Error liquidating account {account}: {e}")
+                    snx.logger.error(f"Error liquidating account {account}: {e}")
 
     return {"message": f"Received block number {block.number}"}

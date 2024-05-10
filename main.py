@@ -1,4 +1,4 @@
-# silverback run main:app --network base:goerli:alchemy --runner silverback.runner:WebsocketRunner
+# silverback run main:app --network base:sepolia:alchemy --runner silverback.runner:WebsocketRunner
 import os
 import asyncio
 from dotenv import load_dotenv
@@ -11,17 +11,12 @@ from silverback import SilverbackApp
 # load the environment variables
 load_dotenv(override=True)
 
-PROVIDER_RPC = os.environ.get("PROVIDER_RPC")
-ADDRESS = os.environ.get("ADDRESS")
 PRIVATE_KEY = os.environ.get("PRIVATE_KEY")
-NETWORK_ID = os.environ.get("NETWORK_ID")
 
 # init snx
 snx = Synthetix(
-    provider_rpc=PROVIDER_RPC,
+    provider_rpc=chain.provider.uri,
     private_key=PRIVATE_KEY,
-    address=ADDRESS,
-    network_id=NETWORK_ID,
 )
 
 # Do this to initialize your app
